@@ -41,6 +41,12 @@ function App() {
   );
 }
 
-export const path = 'http://localhost:5000'
+let path
+if (
+  process.env.NODE_ENV === 'development'
+  ) {path = 'http://localhost:5000'}
+else {path = 'https://myfirstbackend2.herokuapp.com'}
+
+export { path }
 
 export default App;
