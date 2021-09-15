@@ -45,7 +45,7 @@ let path
 if (
   process.env.NODE_ENV === 'development'
   ) {path = 'http://localhost:5000'}
-else {path = 'https://myfirstbackend2.herokuapp.com'}
+else {path = 'https://endgame-backend.herokuapp.com/'}
 
 export { path }
 
