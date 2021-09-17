@@ -6,34 +6,31 @@ import { getCookie, token } from './API'
 import { fetchUserData } from '../userProfile/API';
 import { cards } from './API';
 
+import './style.sass'
+
 function BattlePage() {
     let [battleData, setBattleData] = useState()
     const [userData, setUserData] = useState()
+
     const [yourIndex, setYourIndex] = useState()
     const [enemyIndex, setEnemyIndex] = useState()
+
+    const [yourName, setYourName] = useState()
+    const [enemyName, setEnemyName] = useState()
+    const [yourHP, setYourHP] = useState()
+    const [enemyHP, setEnemyHP] = useState()
     const [yourMove, setYourMove] = useState()
+    const [enemyMove, setEnemyMove] = useState()
+
+    const [fightTimer, setFightTimer] = useState()
+    const [turn, setTurn] = useState()
+
     const [battleFinished, setBattleFinished] = useState(false)
 
     const history = useHistory()
     const socket = io(path, {
         query: `token=${getCookie('jwt')}`
     });
-
-    function calculateHP(data) {
-        const card0 = cards[data.users[0].currentMove]
-        const card1 = cards[data.users[1].currentMove]
-
-        let dmg0 = card1.attack - card0.defence
-        let dmg1 = card0.attack - card1.defence
-
-        if (dmg0 < 0) dmg0 = 0
-        if (dmg1 < 0) dmg1 = 0
-
-        data.users[0].hp -= dmg0
-        data.users[1].hp -= dmg1
-
-        return data
-    }
 
     function move(cardIndex) {
         //set current move 
@@ -55,19 +52,21 @@ function BattlePage() {
             battleData.users[enemyIndex].canMove = true
         }
         socket.emit('update battle', battleData)
-        // socket.emit('stop turn timer', yourIndex)
-        // socket.emit('start turn timer', battleData, enemyIndex)
 
         setBattleData(battleData)
     }
 
-    useEffect(() => {
+    function handleKillEnemy() {
+            battleData.users[enemyIndex].hp = 0
+            setBattleData()
+            socket.emit('update battle', battleData)
+    }
 
+    useEffect(() => {
         socket.emit('update battle', battleData)
         socket.on('update battle', data => {
             console.log('updating battle...')
             setBattleData(data)
-            console.log(data)
         })
         socket.on('finish battle', (data) => {
             console.log('finishing battle')
@@ -76,10 +75,8 @@ function BattlePage() {
         })
     }, [])
     useEffect(async () => {
-        const res = await fetchUserData().then(res => {
+        await fetchUserData().then(res => {
             setUserData(res);
-
-
         }).catch(err => {
             history.push('/login')
         })
@@ -88,40 +85,50 @@ function BattlePage() {
     useEffect(() => {
         setYourIndex(battleData?.users.findIndex(item => item._id == userData._id))
         setEnemyIndex(Math.abs(battleData?.users.findIndex(item => item._id == userData._id) - 1))
+
     }, [battleData, userData])
+
+    useEffect(() => {
+        setYourName(battleData?.users[yourIndex]?.username || 'unknown')
+        setEnemyName(battleData?.users[enemyIndex]?.username || 'unknown')
+
+        setYourHP(battleData?.users[yourIndex]?.hp)
+        setEnemyHP(battleData?.users[enemyIndex]?.hp)
+
+        setYourMove(cards[battleData?.users[yourIndex]?.currentMove]?.name)
+        setEnemyMove(cards[battleData?.users[enemyIndex]?.currentMove]?.name)
+
+        setFightTimer(battleData?.fightTimer)
+        setTurn(battleData?.users[yourIndex]?.canMove && 'your' || battleData?.users[enemyIndex]?.canMove && 'enemy')
+    }, [yourIndex, enemyIndex, battleData, userData])
 
     return (
         <div>
             {
-
-
                 battleData && !battleFinished
                     ?
                     <div>
-                        <h1>Your enemy is {battleData.users[enemyIndex]?.username || 'undefined'}</h1>
-                        <h2>Enemy hp: {battleData.users[enemyIndex]?.hp}</h2>
+
+                        {/* Battle field */}
+
+                        <h1>Your enemy is {enemyName}</h1>
+                        <h2>Enemy hp: {enemyHP}</h2>
                         <br />
-                        <p>Enemy move: {cards[battleData.users[enemyIndex]?.currentMove]?.name || 'empty'}</p>
-                        <p>{battleData.fightTimer || battleData.users[yourIndex]?.canMove && 'It\'s your move' || battleData.users[enemyIndex]?.canMove && 'It\'s enemy move'}</p>
-                        <p>Your move: {cards[battleData.users[yourIndex]?.currentMove]?.name || 'empty'}</p>
+                        <p>Enemy move: {enemyMove}</p>
+                        <p>{fightTimer || turn &&`It's ${turn} turn`}</p>
+                        <p>Your move: {yourMove}</p>
                         <br />
-                        <h1>You are {battleData.users[yourIndex]?.username || 'undefined'}</h1>
-                        <h2>Your hp: {battleData.users[yourIndex]?.hp}</h2>
+                        <h1>You are {yourName}</h1>
+                        <h2>Your hp: {yourHP}</h2>
                         <br />
 
+                        <button onClick={handleKillEnemy}>Kill enemy</button>
 
+                        {/* Deck */}
 
-
-                        <button onClick={
-                            () => {
-                                battleData.users[enemyIndex].hp = 0
-                                setBattleData()
-                                socket.emit('update battle', battleData)
-                            }
-                        }>Kill enemy</button>
                         <div>
                             <span>Your cards</span><br />
-                            <div style={{ display: 'flex' }}>
+                            <div>
                                 {
                                     battleData.users[yourIndex]?.cards.map(cardIndex => {
                                         const card = cards[cardIndex]
@@ -140,7 +147,10 @@ function BattlePage() {
                         </div>
                     </div>
                     :
-                    'Waiting for a battle'
+                    <div>
+                        <span>Waiting for a battle...</span>
+                    </div>
+                    
             }
             {
                 battleFinished
