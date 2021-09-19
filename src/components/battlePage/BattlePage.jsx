@@ -14,6 +14,8 @@ function BattlePage() {
 
     const [yourIndex, setYourIndex] = useState()
     const [enemyIndex, setEnemyIndex] = useState()
+    const [you, setYou] = useState()
+    const [enemy, setEnemy] = useState()
 
     const [yourName, setYourName] = useState()
     const [enemyName, setEnemyName] = useState()
@@ -33,6 +35,7 @@ function BattlePage() {
     });
 
     function move(cardIndex) {
+        
         //set current move 
         battleData.users[yourIndex].currentMove = cardIndex
 
@@ -51,7 +54,7 @@ function BattlePage() {
             battleData.users[yourIndex].canMove = false
             battleData.users[enemyIndex].canMove = true
         }
-        socket.emit('update battle', battleData)
+        socket.emit('turn timer stop', battleData)
 
         setBattleData(battleData)
     }
@@ -63,32 +66,46 @@ function BattlePage() {
     }
 
     useEffect(() => {
-        socket.emit('update battle', battleData)
-        socket.on('update battle', data => {
-            console.log('updating battle...')
-            setBattleData(data)
-        })
+
         socket.on('finish battle', (data) => {
             console.log('finishing battle')
             setBattleData(data)
             setBattleFinished(true)
         })
     }, [])
+    useEffect(() => {
+        socket.emit('update battle', battleData)
+    }, [])
     useEffect(async () => {
         await fetchUserData().then(res => {
             setUserData(res);
+            socket.on('update battle', data => {
+                console.log('updating battle...')
+                const yourIndex = data.users?.findIndex(item => item._id == res._id)
+                // console.log(yourIndex)
+                // console.log(yourIndex && data.users[yourIndex].canMove == true && typeof data.users[yourIndex].turnTimer === 'undefined')
+              if ((typeof yourIndex === 'number') && data.users[yourIndex].canMove == true && data.users[yourIndex].turnTimer === undefined) {
+                  console.log('starting turn timer')
+                    socket.emit('turn timer start', data, yourIndex)
+                } 
+                setBattleData(data)
+            })
         }).catch(err => {
             history.push('/login')
         })
     }, [])
 
     useEffect(() => {
-        setYourIndex(battleData?.users.findIndex(item => item._id == userData._id))
-        setEnemyIndex(Math.abs(battleData?.users.findIndex(item => item._id == userData._id) - 1))
+        setYourIndex(battleData?.users?.findIndex(item => item._id == userData._id))
+        setEnemyIndex(Math.abs(battleData?.users?.findIndex(item => item._id == userData._id) - 1))
 
     }, [battleData, userData])
 
     useEffect(() => {
+        if (battleData?.users) {
+        setYou(battleData?.users[yourIndex])
+        setEnemy(battleData?.users[enemyIndex])
+
         setYourName(battleData?.users[yourIndex]?.username || 'unknown')
         setEnemyName(battleData?.users[enemyIndex]?.username || 'unknown')
 
@@ -99,7 +116,7 @@ function BattlePage() {
         setEnemyMove(cards[battleData?.users[enemyIndex]?.currentMove]?.name)
 
         setFightTimer(battleData?.fightTimer)
-        setTurn(battleData?.users[yourIndex]?.canMove && 'your' || battleData?.users[enemyIndex]?.canMove && 'enemy')
+        setTurn(battleData?.users[yourIndex]?.canMove && 'your' || battleData?.users[enemyIndex]?.canMove && 'enemy')}
     }, [yourIndex, enemyIndex, battleData, userData])
 
     return (
@@ -113,6 +130,7 @@ function BattlePage() {
 
                         <h1>Your enemy is {enemyName}</h1>
                         <h2>Enemy hp: {enemyHP}</h2>
+                        <p>Enemy timer: {enemy?.turnTimer}</p>
                         <br />
                         <p>Enemy move: {enemyMove}</p>
                         <p>{fightTimer || turn &&`It's ${turn} turn`}</p>
@@ -120,6 +138,7 @@ function BattlePage() {
                         <br />
                         <h1>You are {yourName}</h1>
                         <h2>Your hp: {yourHP}</h2>
+                        <p>Your timer: {you?.turnTimer}</p>
                         <br />
 
                         <button onClick={handleKillEnemy}>Kill enemy</button>
@@ -127,10 +146,12 @@ function BattlePage() {
                         {/* Deck */}
 
                         <div>
-                            <span>Your cards</span><br />
+                            <span>Your cards</span>
+                            <br />
                             <div>
                                 {
-                                    battleData.users[yourIndex]?.cards.map(cardIndex => {
+                                    battleData?.users ?
+                                    battleData?.users[yourIndex]?.cards.map(cardIndex => {
                                         const card = cards[cardIndex]
                                         return (
                                             <button onClick={() => {
@@ -142,6 +163,7 @@ function BattlePage() {
                                             </button>
                                         )
                                     })
+                                    : ''
                                 }
                             </div>
                         </div>
