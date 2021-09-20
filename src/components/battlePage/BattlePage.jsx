@@ -4,7 +4,6 @@ import { io } from 'socket.io-client'
 import { path } from '../../App';
 import { getCookie, token } from './API'
 import { fetchUserData } from '../userProfile/API';
-import { cards } from './API';
 
 import './style.sass'
 
@@ -34,16 +33,16 @@ function BattlePage() {
         query: `token=${getCookie('jwt')}`
     });
 
-    function move(cardIndex) {
+    function move(card) {
         
         //set current move 
-        battleData.users[yourIndex].currentMove = cardIndex
+        battleData.users[yourIndex].currentMove = card
 
         //give new card, delete current
-        battleData.users[yourIndex].cards = battleData.users[yourIndex].cards.map(currentCardIndex => currentCardIndex == cardIndex ? Math.floor(Math.random() * 19) : currentCardIndex)
+        battleData.users[yourIndex].cards = battleData.users[yourIndex].cards.map(currentCard => currentCard.name == card.name ? {name: undefined} : currentCard)
 
         //if both did move
-        if (!isNaN(battleData.users[yourIndex].currentMove) && !isNaN(battleData.users[enemyIndex].currentMove)) {
+        if (battleData.users[yourIndex].currentMove?.name && battleData.users[enemyIndex].currentMove?.name) {
             
             //no moves. time for animation
             battleData.users[yourIndex].canMove = false
@@ -112,8 +111,8 @@ function BattlePage() {
         setYourHP(battleData?.users[yourIndex]?.hp)
         setEnemyHP(battleData?.users[enemyIndex]?.hp)
 
-        setYourMove(cards[battleData?.users[yourIndex]?.currentMove]?.name)
-        setEnemyMove(cards[battleData?.users[enemyIndex]?.currentMove]?.name)
+        setYourMove(battleData?.users[yourIndex]?.currentMove?.name)
+        setEnemyMove(battleData?.users[enemyIndex]?.currentMove?.name)
 
         setFightTimer(battleData?.fightTimer)
         setTurn(battleData?.users[yourIndex]?.canMove && 'your' || battleData?.users[enemyIndex]?.canMove && 'enemy')}
@@ -151,15 +150,14 @@ function BattlePage() {
                             <div>
                                 {
                                     battleData?.users ?
-                                    battleData?.users[yourIndex]?.cards.map(cardIndex => {
-                                        const card = cards[cardIndex]
+                                    battleData?.users[yourIndex]?.cards.map(card => {
                                         return (
                                             <button onClick={() => {
-                                                if (battleData.users[yourIndex].canMove) {
-                                                    move(cardIndex)
+                                                if (battleData.users[yourIndex].canMove && card.name) {
+                                                    move(card)
                                                 }
                                             }}>
-                                                {`${card.name} ${card.attack}💥 ${card.defence}🛡️`}
+                                                {card.name ? `${card.name} ${card.attack}💥 ${card.defence}🛡️` : `empty`}
                                             </button>
                                         )
                                     })
