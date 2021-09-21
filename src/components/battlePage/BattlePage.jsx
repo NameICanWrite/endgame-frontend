@@ -30,7 +30,8 @@ function BattlePage() {
 
     const history = useHistory()
     const socket = io(path, {
-        query: `token=${getCookie('jwt')}`
+        // query: `token=${getCookie('jwt')}`,
+        withCredentials: true
     });
 
     function move(card) {
