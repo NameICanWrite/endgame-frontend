@@ -1,0 +1,113 @@
+.battle-page
+    background-color: #000000
+
+    .battle-container
+        position: relative
+
+        height: 100vh
+        max-width: 700px
+
+        margin: 0 auto
+
+        background-color: #fff
+
+        .your-info, .enemy-info
+            position: absolute
+            left: 50%
+            transform: translateX(-50%)
+
+            width: 200px
+            height: 100px
+            padding: 10px
+
+            background-color: #d69e02
+            border-top-left-radius: 100%
+            border-top-right-radius: 100%
+
+            .name
+                width: fit-content
+                margin: 0 auto
+                margin-bottom: 30px
+                font-size: 20px
+
+            .timer, .hp
+                display: flex
+                justify-content: space-between
+
+                position: relative
+
+            .progress-bar
+                position: absolute
+                right: 0
+                top: 50%
+                transform: translateY(-50%)
+
+                width: 100px
+                height: 0.5em
+
+                border: 1px black solid
+
+        .your-info
+            bottom: 0
+
+        .enemy-info
+            transform: rotate(180deg) translateX(50%)
+
+        .cards
+            display: flex
+            justify-content: space-around
+            margin: 0 auto
+
+        .card-container, .move-container
+            position: relative
+            width: 122px
+            heigt: 100px
+
+        .card
+            width: 100px
+            height: 100px
+
+            padding: 5px
+            margin: 5px
+
+            border: 1px black solid
+            border-radius: 10px    
+
+            span
+                display: block
+
+            .card-name
+                text-align: center
+                font-size: 1.2em
+
+            .card-attack, .card-defence
+                margin-top: 10px
+                margin-left: 20px
+
+        .your-cards
+            position: absolute
+            width: 100%
+            bottom: 130px
+
+        .enemy-cards
+            position: absolute
+            width: 100%
+            top: 130px
+
+        .moves
+            position: absolute
+            top: 50%
+            left: 50%
+            transform: translateX(-50%) translateY(-50%)
+
+        .referee
+            position: absolute
+            left: 25%
+            top: 50%
+
+            transform: translateX(-50%) translateY(-50%)
+
+        .kill-enemy
+            position: absolute
+            right: 0
+            top: 50%
