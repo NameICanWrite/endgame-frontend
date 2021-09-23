@@ -76,15 +76,15 @@ function LoginForm() {
                         <div className="login">
                             <h4>Log in</h4>
                             <label key='1'>
-                                <span>username</span>
+                                <span>Username</span>
                                 <input type="text"
                                     onChange={(e) => setUsername(e.target.value)} autoComplete="off" />
                             </label>
                             <label key='2'>
-                                <span>password</span>
+                                <span>Password</span>
                                 <input type="password" onChange={(e) => setPassword(e.target.value)} />
                             </label>
-                            <a href='#' className='toggle' onClick={toggleMode} style={{ color: '#008CB4' }}>New? Sign up here ={'>'}</a>
+                            <div className='toggle' onClick={toggleMode}>New? Sign up here ={'>'}</div>
 
                             <button className='submit-button' onClick={handleLogin}>Log in</button>
                         </div>
@@ -97,20 +97,20 @@ function LoginForm() {
                         <div className="register">
                             <h4>Sign up</h4>
                             <label key='3'>
-                                <span>username</span>
+                                <span>Username</span>
                                 <input type="text" onChange={(e) => setUsername(e.target.value)} autoComplete="off" />
                             </label>
 
                             <label key='4'>
-                                <span>password</span>
+                                <span>Password</span>
                                 <input type="password" onChange={(e) => setPassword(e.target.value)} autoComplete="off" />
                             </label>
 
                             <label key='5'>
-                                <span>email</span>
+                                <span>Email</span>
                                 <input type="text" onChange={(e) => setEmail(e.target.value)} />
                             </label>
-                            <a href='#' className='toggle' onClick={toggleMode} style={{ color: '#008CB4' }}>Already have an account? Go here ={'>'}</a>
+                            <div className='toggle' onClick={toggleMode}>Login ={'>'}</div>
 
                             <button className='submit-button' onClick={handleRegister}>Sign up</button>
 

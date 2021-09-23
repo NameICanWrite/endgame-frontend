@@ -44,15 +44,11 @@ function UserProfile() {
     }, []);
 
     return (
-    <div>
-      <h1 className='profile-name' >User {username}</h1>
-      <button className='logout' onClick={handleLogout} >logout</button>
-      <br />
-      <br />
-      <button className='to-battle' onClick={handleStartBattle}>TO BATTLE</button>
-      <br />
-      <br />
-      <h4>Wins: {wins}</h4>
+    <div className='profile'>
+      <div className='profile-name' >User {username}</div>
+      <div className='logout' onClick={handleLogout} >logout</div>
+      <div className='to-battle' onClick={handleStartBattle}>TO BATTLE</div>
+      <div className='wins'>You have {wins} wins</div>
     </div >
   )
   }

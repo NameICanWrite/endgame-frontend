@@ -1,77 +1,94 @@
-html, body
-    height: 100%
+$font-size: 20px
+@import ../../_utilities
+
+.background 
     width: 100%
-    margin: 0
+    height: 100vh
+    background-color: #ffffff
+    padding-top:  100px
+
+.login-container
+    background-color: white
+    width: 300px
+    margin: 0 auto
 
 
+    font-size: $font-size
 
-    .background 
-        width: 100%
-        height: 100vh
-        background-color: red
-        padding-top:  100px
+    padding: 10px
+    
 
-    .login-container
-        background-color: white
-        width: 600px
+    .error
+        position: absolute
+        color: red
+        height: 1em
+        left: 40%
+        top: 50px
+    
+    .message
+        position: absolute
+        color: blue
+        height: 1em
+        left: 40%
+        top: 50px
+
+    .loader
+
+    h4
+        display: block
+        width: fit-content
         margin: 0 auto
-
-
         font-size: 40px
+        text-align: right
 
-        padding: 20px
-        border-radius: 15px
+    label
+        display: block
 
-        .error
-            position: absolute
-            color: red
-            height: 1em
-        
-        .message
-            position: absolute
-            color: blue
-            height: 1em
-
-        .loader
-
-        h4
+        span
+            display: block
             margin-top: 20px
-            margin-bottom: 20px
-            text-align: right
-            margin-right: 20%
 
-        label
+        input[type=text], input[type=password]
+            font-size: $font-size*2
             display: block
+            
 
-            span
-                display: block
+            width: 80%
+            height: 1em
 
-            input[type=text], input[type=password]
-                font-size: inherit
-                display: block
-                
+            margin: 0 auto
+            margin-top: 10px
+            margin-bottom: 5px
 
-                width: 80%
-                height: 1em
+            border-radius: 10px
 
-                margin: 0 auto
-                margin-top: 20px
-                margin-bottom: 20px
+            border: 1px black solid
 
-                border-radius: 10px
+            &:active, &:focus
+                outline: none
 
-                &:active, &:focus
-                    outline: none
+    .toggle
+        position: absolute
+        top:10%
+        right: 10%
 
-        .toggle
-            display: block
+        font-size: $font-size
+        text-decoration: underline
+        cursor: pointer
 
-        .submit-button
-            display: block
-            width: 100%
-            height: 50px
-            margin-top: 20px
-            font-size: 30px
+    .submit-button
+        display: block
+        width: 90%
+        height: 50px
+        margin: 0 auto
+        margin-top: 40px
+        font-size: $font-size
 
-            background-color: red
-            color: white
+        background-color: $primary-color
+        color: #fff
+
+        border-radius: 5px
+
+        &:active
+            border: 3px $secondary-color solid
+            color: #94acee

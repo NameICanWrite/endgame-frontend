@@ -29,12 +29,12 @@ function BattlePage() {
         name: 'Clone 1',
         defence: 19,
         attack: 9
-      })
+    })
     const [enemyMove, setEnemyMove] = useState({
         name: 'Clone 1',
         defence: 19,
         attack: 9
-      })
+    })
 
     const [fightTimer, setFightTimer] = useState()
     const [turn, setTurn] = useState()
@@ -147,85 +147,92 @@ function BattlePage() {
     }, [yourIndex, enemyIndex, battleData, userData])
 
     return (
-        <div className='battle-page'>
+        <div>
             {
                 battleData && !battleFinished
                     ?
-                    <div className='battle-container'>
+                    <div className='battle-page'>
+                        <div className='battle-container'>
 
-                        {/* Battle field */}
+                            {/* Battle field */}
 
 
-                        {/* Enemy player */}
+                            {/* Enemy player */}
 
-                        <div className="enemy-info">
-                            <div className='name'>{enemyName}</div>
-                            <div className='timer'>
-                                <span>Time left:</span>
-                                <div className="progress-bar" style={{ background: `linear-gradient(to right, blue ${100 * (enemyTurnTimer) / 15}%, transparent ${100 - 100 * (enemyTurnTimer) / 15}%)` }}>
+                            <div className="enemy-info">
+                                <div className='name'>{enemyName}</div>
+                                <div className='timer'>
+                                    <span>Time left:</span>
+                                    <div className="progress-bar" style={{ background: `linear-gradient(to right, blue ${100 * (enemyTurnTimer) / 15}%, transparent ${100 - 100 * (enemyTurnTimer) / 15}%)` }}>
+                                    </div>
+                                </div>
+                                <div className='hp'>
+                                    <span>Health:</span>
+                                    <div className="progress-bar" style={{ background: `linear-gradient(to right, red ${100 * (enemyHP) / 20}%, transparent ${100 - 100 * (enemyHP) / 20}%)` }}>
+                                    </div>
                                 </div>
                             </div>
-                            <div className='hp'>
-                                <span>Health:</span>
-                                <div className="progress-bar" style={{ background: `linear-gradient(to right, red ${100 * (enemyHP) / 20}%, transparent ${100 - 100 * (enemyHP) / 20}%)` }}>
+
+                            <div className='enemy-cards'>
+                                <Cards cards={battleData?.users[enemyIndex]?.cards} handleCard={() => { }} />
+                            </div>
+
+
+                            {/* Display moves */}
+
+                            <div className='referee'>{fightTimer || turn && `It's ${turn} turn` || 'Loading...'}</div>
+
+                            <div className="moves">
+                                <div className='move-container'>
+                                    {enemyMove && <Card card={enemyMove} />}
+                                </div>
+
+                                <div className='move-container'>
+                                    {yourMove && <Card card={yourMove} />}
                                 </div>
                             </div>
-                        </div>
-
-                        <div className='enemy-cards'>
-                            <Cards cards={battleData?.users[enemyIndex]?.cards} handleCard={() => {}}/>
-                        </div>
 
 
-                        {/* Display moves */}
+                            {/* Your player */}
 
-                        <div className='referee'>{fightTimer || turn && `It's ${turn} turn` || 'Loading...'}</div>
-
-                        <div className="moves">
-                            <div className='move-container'>
-                                {enemyMove && <Card card={enemyMove}/>}
+                            <div className='your-cards'>
+                                <Cards cards={battleData?.users[yourIndex]?.cards} handleCard={handleCard} />
                             </div>
-                            
-                            <div className='move-container'>
-                                {yourMove && <Card card={yourMove}/>}
-                            </div>
-                        </div>
 
-
-                        {/* Your player */}
-
-                        <div className='your-cards'>
-                            <Cards cards={battleData?.users[yourIndex]?.cards} handleCard={handleCard}/>
-                        </div>
-
-                        <div className="your-info">
-                            <div className='name'>{yourName}</div>
-                            <div className='timer'>
-                                <span>Time left:</span>
-                                <div className="progress-bar" style={{ background: `linear-gradient(to right, blue ${100 * (yourTurnTimer) / 15}%, transparent ${100 - 100 * (yourTurnTimer) / 15}%)` }}>
+                            <div className="your-info">
+                                <div className='name'>{yourName}</div>
+                                <div className='timer'>
+                                    <span>Time left:</span>
+                                    <div className="progress-bar" style={{ background: `linear-gradient(to right, blue ${100 * (yourTurnTimer) / 15}%, transparent ${100 - 100 * (yourTurnTimer) / 15}%)` }}>
+                                    </div>
+                                </div>
+                                <div className='hp'>
+                                    <span>Health:</span>
+                                    <div className="progress-bar" style={{ background: `linear-gradient(to right, red ${100 * (yourHP) / 20}%, transparent ${100 - 100 * (yourHP) / 20}%)` }}>
+                                    </div>
                                 </div>
                             </div>
-                            <div className='hp'>
-                                <span>Health:</span>
-                                <div className="progress-bar" style={{ background: `linear-gradient(to right, red ${100 * (yourHP) / 20}%, transparent ${100 - 100 * (yourHP) / 20}%)` }}>
-                                </div>
-                            </div>
-                        </div>
 
-                        <button onClick={handleKillEnemy} className='kill-enemy'>Kill enemy</button>
+                            <button onClick={handleKillEnemy} className='kill-enemy'>Kill enemy</button>
+                        </div>
                     </div>
-                    :
-                    <div>
-                        <span>Waiting for a battle...</span>
-                    </div>
+
+                    : 
+                    
+                    (
+                        !battleFinished &&
+                        <div className="waiting">Waiting for the second player</div>
+                    )
+
 
             }
             {
                 battleFinished
                 &&
                 <div>
-                    <h1>{battleData.winner} wins</h1>
-                    <button onClick={() => history.push('/profile')}>Ok</button>
+                    <div className='claim-winner'>
+                        {battleData.winner} wins</div>
+                    <button className='battle-finished-button' onClick={() => history.push('/profile')}>Ok</button>
                 </div>
             }
         </div>
