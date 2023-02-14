@@ -56,6 +56,7 @@ function LoginForm() {
             .then((res) => {
                 console.log(res)
                 setMessage(res)
+                history.push('/profile')
             })
             .catch(err => setError(err.message))
             .finally(() => setLoading(false))

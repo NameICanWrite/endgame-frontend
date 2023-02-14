@@ -121,6 +121,7 @@ function BattlePage() {
     }, [battleData, userData])
 
     useEffect(() => {
+        console.log(battleData)
         if (battleData?.users) {
             // battleData.users[yourIndex] && (battleData.users[yourIndex].turnTimer = 9)
             setYou(battleData?.users[yourIndex])
