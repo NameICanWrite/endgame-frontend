@@ -49,6 +49,7 @@ function UserProfile() {
       <div className='logout' onClick={handleLogout} >logout</div>
       <div className='to-battle' onClick={handleStartBattle}>TO BATTLE</div>
       <div className='wins'>You have {wins} wins</div>
+      <div className="disclaimer">For testing you can battle with yourself in different browsers</div>
     </div >
   ) : <p className="profile-loading">Loading...</p>
   }
