@@ -5,13 +5,19 @@ import LoginForm from './components/loginForm/LoginForm';
 import { fetchUserData } from './components/userProfile/API';
 import UserProfile from './components/userProfile/UserProfile';
 import BattlePage from './components/battlePage/BattlePage';
+import githubLogo from './github-logo.png'
+import './style.sass'
 
 
 
 function App() {
 
   return (
-    <Router>
+    <div>
+      <div className="githubLogoWrapper">
+        <a href='https://github.com/NameICanWrite/endgame-backend'><img className="githubLogo" src={githubLogo} alt="github" /></a>
+      </div>
+      <Router>
       <Route
         path='/login' exact
         render={
@@ -38,6 +44,8 @@ function App() {
       />
       {/* <Redirect to='/profile' /> */}
     </Router>
+    </div>
+    
   );
 }
 
