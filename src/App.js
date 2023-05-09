@@ -53,7 +53,7 @@ let path
 if (
   process.env.NODE_ENV === 'development'
   ) {path = 'http://localhost:5000'}
-else {path = 'https://card-battle.onrender.com'}
+else {path = 'https://endgame-backend.onrender.com'}
 
 export { path }
 
