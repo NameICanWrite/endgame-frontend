@@ -32,8 +32,8 @@ function UserProfile() {
   }
 
 
-  useEffect(async () => {
-      const res = await fetchUserData().then(res => {
+  useEffect(() => {
+      fetchUserData().then(res => {
         // setUserData(res);
         // const newWins = res.data?.wins || 0
         setWins(res.data.wins || 0)
@@ -41,7 +41,7 @@ function UserProfile() {
       }).catch(err => {
         history.push('/login')
       })
-    }, []);
+    }, [history]);
 
     return username ? (
     <div className='profile'>

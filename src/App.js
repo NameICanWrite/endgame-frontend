@@ -15,39 +15,42 @@ import baseUrl from './baseUrl';
 function App() {
 
   return (
-    <HealthCheck>
+    <div>
+      <HealthCheck>
 
-      <div className="githubLogoWrapper">
-        <a href='https://github.com/NameICanWrite/endgame-backend'><img className="githubLogo" src={githubLogo} alt="github" /></a>
-      </div>
-      <Router>
-      <Route
-        path='/login' exact
-        render={
-          () => <LoginForm />
-        }
-      />
+<div className="githubLogoWrapper">
+  <a href='https://github.com/NameICanWrite/endgame-backend'><img className="githubLogo" src={githubLogo} alt="github" /></a>
+</div>
+<Router>
+<Route
+  path='/login' exact
+  render={
+    () => <LoginForm />
+  }
+/>
+<Route 
+  path='/profile'
+  render={
+    () => <UserProfile/>
+  }
+/>
       <Route 
-        path='/profile'
-        render={
-          () => <UserProfile/>
-        }
-      />
-            <Route 
-        path='/battle'
-        render={
-          () => <BattlePage/>
-        }
-      />
-      <Route exact 
-        path='/'
-        render={
-          () => <Redirect to='/profile' />
-        }
-      />
-      {/* <Redirect to='/profile' /> */}
-    </Router>
-    </HealthCheck>
+  path='/battle'
+  render={
+    () => <BattlePage/>
+  }
+/>
+<Route exact 
+  path='/'
+  render={
+    () => <Redirect to='/profile' />
+  }
+/>
+{/* <Redirect to='/profile' /> */}
+</Router>
+</HealthCheck>
+    </div>
+    
     
   );
 }
