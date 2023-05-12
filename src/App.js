@@ -7,13 +7,16 @@ import UserProfile from './components/userProfile/UserProfile';
 import BattlePage from './components/battlePage/BattlePage';
 import githubLogo from './github-logo.png'
 import './style.sass'
+import HealthCheck from './components/HealthCheck/HealthCheck';
+import baseUrl from './baseUrl';
 
 
 
 function App() {
 
   return (
-    <div>
+    <HealthCheck>
+
       <div className="githubLogoWrapper">
         <a href='https://github.com/NameICanWrite/endgame-backend'><img className="githubLogo" src={githubLogo} alt="github" /></a>
       </div>
@@ -44,16 +47,12 @@ function App() {
       />
       {/* <Redirect to='/profile' /> */}
     </Router>
-    </div>
+    </HealthCheck>
     
   );
 }
 
-let path
-if (
-  process.env.NODE_ENV === 'development'
-  ) {path = 'http://localhost:5000'}
-else {path = 'https://endgame-backend.onrender.com'}
+const path = baseUrl
 
 export { path }
 
